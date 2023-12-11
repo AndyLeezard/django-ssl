@@ -32,7 +32,7 @@ SECRET_KEY = getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost,[::1]').split(',')
+ALLOWED_HOSTS = ["*"] if DEBUG else getenv('DJANGO_ALLOWED_HOSTS').split(',')
 
 
 # Application definition

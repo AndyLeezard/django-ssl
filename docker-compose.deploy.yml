@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+    restart: always
+    env_file:
+      - .env
+      
+  proxy:
+    build:
+      context: ./docker/proxy
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - certbot-web:/vol/www
+      - proxy-dhparams:/vol/proxy
+      - certbot-certs:/etc/letsencrypt
+    env_file:
+      - .env
+
+  certbot:
+    build:
+      context: ./docker/certbot
+    command: echo "Skipping..."
+    volumes:
+      - certbot-web:/vol/www
+      - certbot-certs:/etc/letsencrypt
+    depends_on:
+      - proxy
+    env_file:
+      - .env
+
+
+volumes:
+  certbot-web:
+  proxy-dhparams:
+  certbot-certs:
